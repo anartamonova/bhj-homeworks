@@ -1,6 +1,6 @@
 const hasTooltip = document.querySelectorAll(".has-tooltip");
 for (let i = 0; i < hasTooltip.length; i++) {
-  hasTooltip[i].insertAdjacentElement("afterEnd", "<div class='tooltip'> $ {hasTooltip[i].title}</div>");
+  hasTooltip[i].insertAdjacentHTML("afterEnd", `<div class="tooltip">${hasTooltip[i].title}</div>`);
   hasTooltip[i].addEventListener("click", (element) => {
     element.preventDefault();
 

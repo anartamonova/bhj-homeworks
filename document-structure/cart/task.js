@@ -1,38 +1,37 @@
-let quantityValue = document.getElementsByClassName("product__quantity-value");
-let controlInc = document.getElementsByClassName("product__quantity-control_inc");
-let controlDec = document.getElementsByClassName("product__quantity-control_dec");
+const products = document.querySelectorAll(".product");
 
-for (let i = 0; i < quantityValue.length; i++) {
-    controlInc[i].addEventListener("click", () => {
-        quantityValue[i].textContent++;
-    })
-    controlDec[i].addEventListener("click", () => {
-        quantityValue[i].textContent--;
+products.forEach((item) =>  {
+  const controlInc = item.querySelector(".product__quantity-control_inc");
+  const controlDec = item.querySelector(".product__quantity-control_dec");
+  let quantityValue = item.querySelector(".product__quantity-value");
 
-        if (quantityValue[i].textContent < "1") {
-            quantityValue[i].textContent = "1"
-        }
+  controlInc.addEventListener("click", () => {
+    quantityValue.textContent++;
     });
-    let addProduct = document.getElementsByClassName("product__add");
-    addProduct[i].addEventListener("click", () => {
-        if (quantityValue[i].textContent === "0") {
-            return;
-        } 
-        let cartProducts = document.querySelector(".cart__products");
-        let product = document.getElementsByClassName("product");
-        for (let n = 0; n < cartProducts.children.length; n++) {
-            if (cartProducts.children[n].dataset.id === product[i].dataset.id) {
-                let cartProductsCount = cartProducts.children[n].querySelector(".cart__product-count").textContent;
-                let newProductValue = Number(cartProductsCount) + Number(quantityValue[n].textContent);
 
-                return cartProducts.children[n].querySelector('.cart__product-count').textContent = newProductValue;
-            }
-        }
-        cartProducts.insertAdjacentHTML("beforeend", `
-            <div class="cart__product" data-id="${product[i].dataset.id}">
-                <img class="cart__product-image" src="${product[i].querySelector('img').getAttribute('src')}">
-                <div class="cart__product-count">${quantityValue[i].textContent}</div>
-            </div>
-            `);
-    })
-};
+  controlDec.addEventListener("click", () => {
+    quantityValue.textContent--;
+    if (quantityValue.textContent < 1){
+      quantityValue.textContent = 1;
+    } 
+   });
+
+  const addProduct = item.querySelector(".product__add");
+
+  addProduct.addEventListener("click", (e) => {
+    let cartProducts = document.querySelector(".cart__products");
+    let productId = item.dataset.id;
+    let productImg = item.querySelector("img").getAttribute('src');
+    let cartQuantity = quantityValue.textContent;
+    let cartProduct = Array.from(document.querySelectorAll(".cart__product"));
+    let cart = cartProduct.find((el) => el.dataset.id === productId);
+      if (cart){
+        cart.querySelector(".cart__product-count").innerHTML = Number(cart.querySelector(".cart__product-count").innerHTML) + Number(cartQuantity);
+        } else {
+          cartProducts.insertAdjacentHTML("beforeend", 
+            `<div class="cart__product" data-id="${productId}">
+            <img class="cart__product-image" src="${productImg}">
+            <div class="cart__product-count">${cartQuantity}</div>
+            </div>`);}
+  });
+});
